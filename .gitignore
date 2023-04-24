@@ -1,0 +1,14 @@
+.env
+snowflake_ddls/
+models/
+__pycache__/
+.DS_Store
+*.out
+venv/
+model.json
+token.json
+credentials.json
+*.html
+*.dot
+logs/
+*.env
