@@ -26,6 +26,7 @@ class JinjaRenderer:
         
         # Add all of the vars seen in the dictionary as debug
         # Make a copy
+        custom_vars = {}
         if self.custom_variables is not None:
             custom_vars = self.custom_variables
             custom_vars['all_vars'] = dict(self.custom_variables)

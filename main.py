@@ -29,17 +29,12 @@ def main(*args):
     config = ConfigLoader(configuration_file = configuration_file)
     config.load()
 
-    templates_path = './templates'
-    template_name = 'test.txt'
-    output_path = './target'
-    output_name = 'test.txt'
-
-    template = JinjaRenderer(   templates_path = templates_path, 
-                                template_name = template_name, 
-                                output_path = output_path, 
-                                output_name = output_name,
-                                custom_functions = config.custom_functions,
-                                custom_variables = config.custom_variables
+    template = JinjaRenderer(   templates_path = config.data['template_path'], 
+                                template_name = config.data['template_name'], 
+                                output_path = config.data['output_path'], 
+                                output_name = config.data['output_name'],
+                                custom_functions = config.data['custom_functions'],
+                                custom_variables = config.data['custom_variables']
                             )
     template.load_template()
     template.render_template()
