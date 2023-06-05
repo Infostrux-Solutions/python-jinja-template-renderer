@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
 from inspect import getmembers, isfunction
+from pathlib import Path
 
 import os
 import sys
@@ -31,14 +32,26 @@ class ConfigLoader:
         print(os.path.abspath(path))
         return os.path.abspath(path)
 
+    # Variable empty checker
+    def is_empty(self, var):
+        if var is None:
+            return True
+        elif isinstance(var, str):
+            if var.strip() == '':
+                return True
+        elif isinstance(var, list):
+            if len(var) == 0:
+                return True
+        return False
+
     # Determine which variable takes priority
     # Currently var1 is the variable that returns the data
     # If both are empty error and exit
     def set_var(self, var1, var2, var_name):
         value = None
-        if var1 is not None and var1.strip() != '':
+        if not self.is_empty(var1):
             value = var1
-        elif var2 is not None and var2.strip() != '':
+        elif not self.is_empty(var2):
             value = var2
         else:
             sys.exit(msg.error(f'No value specifed for {var_name}. Check your configuration files!'))
@@ -87,26 +100,45 @@ class ConfigLoader:
 
             self.data[header] = self.set_var(vars[header] , data_raw[header] , header)
 
-            if header in ['output_path', 'custom_functions_file', 'template_path']:
+            if header in ['output_path', 'template_path']:
                 self.data[header] = os.path.abspath(self.data[header])
+
+            if header == 'custom_functions_file':
+                # Check to see if the custom functions location is a list of files
+                # If list import all of the files
+                if type(self.data['custom_functions_file']) is not list:
+                    self.data['custom_functions_file'] = [os.path.abspath(self.data['custom_functions_file'])]
+                
+                tmp = []
+                # Otherwise iterate and abspath all
+                for file in self.data['custom_functions_file']:
+                    tmp.append(os.path.abspath(file))
+                self.data['custom_functions_file'] = tmp
+                print(tmp)
 
         # Load the custom functions and variables
         self.load_custom_functions()
-        self.data['custom_variables'] = data_raw['custom_variables']
+        
+        if 'custom_variables' in data_raw.keys():
+            print(msg.info('Found custom variables. Loading...'))
+            self.data['custom_variables'] = data_raw['custom_variables']
 
     # Attempts to load the functions in the custom function python file
     def load_custom_functions(self):
-
-        try:
-            module_name = 'custom_functions'
-            spec = importlib.util.spec_from_file_location(module_name, self.data['custom_functions_file'])
-            custom_functions = importlib.util.module_from_spec(spec)
-            sys.modules[module_name] = custom_functions
-            spec.loader.exec_module(custom_functions)
-      
-            self.custom_functions = getmembers(custom_functions, isfunction)
-            self.data['custom_functions'] = self.custom_functions
-            print(self.custom_functions)
-
-        except Exception as e:
-            print(msg.error(e))
+        self.data['custom_functions'] = []
+    
+        for file in self.data['custom_functions_file']:
+            filename = Path(file).stem
+            
+            try:
+                module_name = 'custom_functions'
+                spec = importlib.util.spec_from_file_location(module_name, file)
+                custom_functions = importlib.util.module_from_spec(spec)
+                sys.modules[module_name] = custom_functions
+                spec.loader.exec_module(custom_functions)
+        
+                funcs = getmembers(custom_functions, isfunction)
+                self.data['custom_functions'].append((filename,funcs))
+                
+            except Exception as e:
+                print(msg.error(e))

@@ -34,8 +34,9 @@ class JinjaRenderer:
         # Add the custom functions if present
         if self.custom_functions is not None:
             custom_funcs = {}
-            for func in self.custom_functions:
-                custom_funcs[func[0]] = func[1]
+            for module in self.custom_functions:
+                for func in module[1]:
+                    custom_funcs[f'{module[0]}__{func[0]}'] = func[1]
             self.template.globals.update(custom_funcs)
 
         self.output = self.template.render(custom_vars)
