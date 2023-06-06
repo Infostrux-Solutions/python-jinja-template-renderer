@@ -7,8 +7,8 @@ import os, sys
 class JinjaRenderer:
 
     """
-    Base Jinja renderer. 
-    """ 
+    Base Jinja renderer.
+    """
     custom_variables:   Dict[str, Any]   = None
     custom_functions:   List[Any] = None
     templates_path:     str = None
@@ -23,7 +23,7 @@ class JinjaRenderer:
         self.template = env.get_template(self.template_name)
 
     def render_template(self):
-        
+
         # Add all of the vars seen in the dictionary as debug
         # Make a copy
         custom_vars = {}
@@ -47,9 +47,9 @@ class JinjaRenderer:
             os.makedirs(self.output_path)
 
         full_filepath = os.path.join(self.output_path, self.output_name)
-        
+
         with open(full_filepath, 'w') as f:
-            f.write(self.output)   
-        
+            f.write(self.output)
+
     def return_output(self):
         return self.output

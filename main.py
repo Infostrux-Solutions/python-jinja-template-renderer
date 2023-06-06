@@ -55,9 +55,9 @@ def main(*args):
                         )
     config.load()
 
-    template = JinjaRenderer(   templates_path = config.data['template_path'], 
-                                template_name = config.data['template_name'], 
-                                output_path = config.data['output_path'], 
+    template = JinjaRenderer(   templates_path = config.data['template_path'],
+                                template_name = config.data['template_name'],
+                                output_path = config.data['output_path'],
                                 output_name = config.data['output_name'],
                                 custom_functions = config.data['custom_functions'],
                                 custom_variables = config.data['custom_variables']

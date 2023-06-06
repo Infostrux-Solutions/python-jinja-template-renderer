@@ -11,9 +11,9 @@ import importlib.util
 
 @dataclass
 class ConfigLoader:
-    
+
     """
-    A config loading class. 
+    A config loading class.
     Reads a yaml file as the input parameters to the program.
     """
 
@@ -72,7 +72,7 @@ class ConfigLoader:
         with open(self.configuration_file, 'r') as datastream:
             try:
                 config = yaml.safe_load(datastream)
-                
+
             except yaml.YAMLError as err:
                 print(err)
 
@@ -85,7 +85,7 @@ class ConfigLoader:
         vars['custom_functions_file'] = self.custom_functions_file
         vars['template_path']         = self.template_path
         vars['template_name']         = self.template_name
-                
+
         # If there are any passed in variables then it takes priority.
         # Else then the config value takes over
         configuration_headers = [   'output_path',
@@ -109,16 +109,16 @@ class ConfigLoader:
                 # If list import all of the files
                 if type(self.data['custom_functions_file']) is not list:
                     self.data['custom_functions_file'] = [os.path.abspath(self.data['custom_functions_file'])]
-                
+
                 tmp = []
                 # Otherwise iterate and abspath all
                 for file in self.data['custom_functions_file']:
                     tmp.append(os.path.abspath(file))
                 self.data['custom_functions_file'] = tmp
-        
+
         # Load the custom functions and variables
         self.load_custom_functions()
-        
+
         if 'custom_variables' in data_raw.keys():
             print(msg.info('Found custom variables. Loading...'))
             self.data['custom_variables'] = data_raw['custom_variables']
@@ -126,19 +126,19 @@ class ConfigLoader:
     # Attempts to load the functions in the custom function python file
     def load_custom_functions(self):
         self.data['custom_functions'] = []
-    
+
         for file in self.data['custom_functions_file']:
             filename = Path(file).stem
-            
+
             try:
                 module_name = 'custom_functions'
                 spec = importlib.util.spec_from_file_location(module_name, file)
                 custom_functions = importlib.util.module_from_spec(spec)
                 sys.modules[module_name] = custom_functions
                 spec.loader.exec_module(custom_functions)
-        
+
                 funcs = getmembers(custom_functions, isfunction)
                 self.data['custom_functions'].append((filename,funcs))
-                
+
             except Exception as e:
                 print(msg.error(e))

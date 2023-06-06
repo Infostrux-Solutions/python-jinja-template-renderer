@@ -2,7 +2,7 @@ config:
   output_path: './target/'
   output_name: 'sample.txt'
   custom_functions_file: ['./test/templates/main_functions.py', './test/templates/formatters.py']
-  custom_variables: 
+  custom_variables:
     apple: 'Apples are red,'
     company: 'ACME Company'
     revision: 0.0.0.0.1
@@ -11,7 +11,7 @@ config:
       dev: development,
       qa: qa,
       stg: stage,
-      prd: production 
+      prd: production
     }
   template_path: './test/templates/'
   template_name: 'test.txt'

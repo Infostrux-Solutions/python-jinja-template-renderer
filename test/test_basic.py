@@ -8,9 +8,9 @@ def test_set_var():
     empty_string = ''
     empty_spaces = '      '
     string_data  = '   0   '
-    
+
     empty_list   = []
-    list_data    = ['sample'] 
+    list_data    = ['sample']
 
     config = ConfigLoader()
 
@@ -40,7 +40,7 @@ def test_missing_config():
         config = ConfigLoader(configuration_file = 'nothing')
         config.load()
     assert e.type == SystemExit
-    assert 'The configuration file "nothing" cannot be found. Check your paths and filenames.' in e.value.code 
+    assert 'The configuration file "nothing" cannot be found. Check your paths and filenames.' in e.value.code
 
 # Test normal load
 def test_load():
@@ -64,4 +64,3 @@ def test_load():
     assert ('qa', 'qa') in config.data['custom_variables']['target_env'].items()
     assert ('stg', 'stage') in config.data['custom_variables']['target_env'].items()
     assert ('prd', 'production') in config.data['custom_variables']['target_env'].items()
- 
