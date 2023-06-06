@@ -28,6 +28,7 @@ class ConfigLoader:
 
     # Determine if path supplied is relative or absolute
     # Returns the absolute path assuming that the path is relative to the config file
+    # Defunct, may be used in the future for other purposes
     def get_abs_path(self, config_path, path):
         print(os.path.abspath(path))
         return os.path.abspath(path)
@@ -114,8 +115,7 @@ class ConfigLoader:
                 for file in self.data['custom_functions_file']:
                     tmp.append(os.path.abspath(file))
                 self.data['custom_functions_file'] = tmp
-                print(tmp)
-
+        
         # Load the custom functions and variables
         self.load_custom_functions()
         
