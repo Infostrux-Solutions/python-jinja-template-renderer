@@ -14,4 +14,4 @@ config:
       prd: production
     }
   template_path: './test/templates/'
-  template_name: 'test.txt'
+  template_name: 'sample_template.txt'

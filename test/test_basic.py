@@ -1,8 +1,9 @@
 # A list of configuration loader tests
 from lib.config_loader import ConfigLoader
+from lib.template_renderer import JinjaRenderer
 import pytest
 
-def test_set_var():
+def test_coalesce():
 
     none         = None
     empty_string = ''
@@ -15,16 +16,16 @@ def test_set_var():
     config = ConfigLoader()
 
     # Test 1, first variable is set
-    assert(config.set_var(string_data, none, 'Test') == string_data)
-    assert(config.set_var(string_data, empty_string, 'Test') == string_data)
-    assert(config.set_var(string_data, empty_spaces, 'Test') == string_data)
-    assert(config.set_var(list_data, empty_list, 'Test') == list_data)
+    assert(config.coalesce(string_data, none, 'Test') == string_data)
+    assert(config.coalesce(string_data, empty_string, 'Test') == string_data)
+    assert(config.coalesce(string_data, empty_spaces, 'Test') == string_data)
+    assert(config.coalesce(list_data, empty_list, 'Test') == list_data)
 
     # Test 2, second variable is set
-    assert(config.set_var(none, string_data, 'Test') == string_data)
-    assert(config.set_var(empty_string, string_data, 'Test') == string_data)
-    assert(config.set_var(empty_spaces, string_data, 'Test') == string_data)
-    assert(config.set_var(empty_list, list_data, 'Test') == list_data)
+    assert(config.coalesce(none, string_data, 'Test') == string_data)
+    assert(config.coalesce(empty_string, string_data, 'Test') == string_data)
+    assert(config.coalesce(empty_spaces, string_data, 'Test') == string_data)
+    assert(config.coalesce(empty_list, list_data, 'Test') == list_data)
 
 # Test no config
 def test_empty_load():
@@ -64,3 +65,22 @@ def test_load():
     assert ('qa', 'qa') in config.data['custom_variables']['target_env'].items()
     assert ('stg', 'stage') in config.data['custom_variables']['target_env'].items()
     assert ('prd', 'production') in config.data['custom_variables']['target_env'].items()
+
+def test_output():
+    config = ConfigLoader(configuration_file = 'test/templates/config.yml')
+    config.load()
+    template = JinjaRenderer(   templates_path = config.data['template_path'],
+                                template_name = config.data['template_name'],
+                                output_path = config.data['output_path'],
+                                output_name = config.data['output_name'],
+                                custom_functions = config.data['custom_functions'],
+                                custom_variables = config.data['custom_variables']
+                            )
+    template.load_template()
+    template.render_template()
+    test_data = template.return_output()
+    ref = ''
+    with open('test/templates/sample.txt') as f:
+        ref = f.read()
+
+    assert(test_data == ref.rstrip())

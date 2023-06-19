@@ -1,13 +1,14 @@
 # Template Generator
 The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions in use. The code base can be used standalone as a command-line script, or as importable modules that can be imported into another program.
 
+This is especially useful for generating code, such as creating dbt SQL mdoels from a list of requirements or creating other Jinja templates.
 #
 ## Quick Demo
 > **Note** - All of the demo files can be found in the test/templates folder.
 
 Normally, when using Jinja templates, we would pass in some variables to be used in the template. In addition if we wanted to use non-Jinja functions, you would need to add them to the scope of the template. This script intends to streamline this process by automatically importing the Python files with the functions and custom variables and make them available to the template.
 
-We first start with the configuration file `config.yml`:
+We first start with the configuration file [config.yml](../test/config.yml):
 
 ```
 config:
@@ -29,7 +30,7 @@ config:
   template_name: 'test.txt'
 ```
 
-This file specifies all of the project parameters for the job. In particular, we define custom variables for our run, and also include a list of files that contain our functions. We also specify the template file that will be used: `test.txt`
+This file specifies all of the project parameters for the job. In particular, we define custom variables for our run, and also include a list of files that contain our functions. We also specify the template file that will be used: [test.txt](../test/templates/test.txt):
 
 ```
 Company Name: {{ company }}
@@ -60,7 +61,7 @@ Note how for function calls, we follow the notaton of
 ```
 [file_name]__[function_name]
 ```
-This is to allow for functions with the same name but in different files to co-exist with eath other. Once the configuration is set up, we call the script via `main.py`  and pass in the configuration file as an argument. The script will automatically import all of the custom variables and functions to produce the following output:
+This is to allow for functions with the same name but in different files to co-exist with eath other. Once the configuration is set up, we call the script via [main.py](./main.py):  and pass in the configuration file as an argument. The script will automatically import all of the custom variables and functions to produce the following output:
 
 ```
 Company Name: ACME Company

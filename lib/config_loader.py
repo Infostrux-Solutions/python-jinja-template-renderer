@@ -26,13 +26,6 @@ class ConfigLoader:
     template_path:          str = None
     template_name:          str = None
 
-    # Determine if path supplied is relative or absolute
-    # Returns the absolute path assuming that the path is relative to the config file
-    # Defunct, may be used in the future for other purposes
-    def get_abs_path(self, config_path, path):
-        print(os.path.abspath(path))
-        return os.path.abspath(path)
-
     # Variable empty checker
     def is_empty(self, var):
         if var is None:
@@ -48,7 +41,7 @@ class ConfigLoader:
     # Determine which variable takes priority
     # Currently var1 is the variable that returns the data
     # If both are empty error and exit
-    def set_var(self, var1, var2, var_name):
+    def coalesce(self, var1, var2, var_name):
         value = None
         if not self.is_empty(var1):
             value = var1
@@ -99,7 +92,7 @@ class ConfigLoader:
             if header not in data_raw.keys():
                 data_raw[header] = None
 
-            self.data[header] = self.set_var(vars[header] , data_raw[header] , header)
+            self.data[header] = self.coalesce(vars[header] , data_raw[header] , header)
 
             if header in ['output_path', 'template_path']:
                 self.data[header] = os.path.abspath(self.data[header])
