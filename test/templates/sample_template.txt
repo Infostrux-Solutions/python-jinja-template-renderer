@@ -1,0 +1,23 @@
+Company Name: {{ company }}
+Revision No.: {{ revision }}
+Appended Add No.: {{ main_functions__addition(1, 1) }}
+Case No.: {{ main_functions__division(45, 2) }}
+Target Environment: {{ formatters__uppercase(target_env['dev']) }}
+
+{{ main_functions__current_date() }}
+
+Dear Some Random Person,
+
+{{ apple }}
+
+You wrote the following essay for the test:
+
+{{ main_functions__hello_world() }}
+
+After careful review, we have scored it out of 120 points. Your final percentage is shown below.
+
+Your total score: {{ main_functions__calc_score(score) }}%
+
+Sincerly,
+
+Some_Random_Person

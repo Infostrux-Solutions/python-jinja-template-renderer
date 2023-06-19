@@ -14,32 +14,53 @@ def main(*args):
 
     parser = argparse.ArgumentParser(prog='autodbt')
     parser.add_argument('-c','--config', help='The configuration file to load')
+    parser.add_argument('-op','--output_path', help='The output path')
+    parser.add_argument('-o','--output_name', help='The output filename')
+    parser.add_argument('-cf','--custom_functions_file', help='The custom functions file')
+    parser.add_argument('-tp','--template_path', help='The templates path')
+    parser.add_argument('-tn','--template_name', help='The template name')
     args = parser.parse_args()
 
-    # Set the main config location
-    configuration_file = None
-    if os.getenv('CONFIGURATION_FILE'):
-        configuration_file = os.getenv('CONFIGURATION_FILE')
+    # Parse the args
+    # Priority is as follows:
+    # Args >>> Environment Variable >>> Configuration File
 
-    if args.config:
-        configuration_file = args.config
+    variables = {
+        'config': None,
+        'output_path': None,
+        'output_name': None,
+        'custom_functions_file': None,
+        'template_path': None,
+        'template_name': None,
+    }
 
-    print(" configuration file: ", configuration_file)
+    arguments = {}
+    for arg in vars(args):
+        arguments[arg] = getattr(args, arg)
 
-    config = ConfigLoader(configuration_file = configuration_file)
+    for param in variables.keys():
+        if param in arguments.keys():
+            variables[param] = arguments[param]
+        elif os.getenv(param.upper()):
+            variables[param] = os.getenv(param.upper())
+
+    print(" Configuration file: ", variables['config'])
+
+    config = ConfigLoader(  configuration_file = variables['config'],
+                            output_path             = variables['output_path'],
+                            output_name             = variables['output_name'],
+                            custom_functions_file   = variables['custom_functions_file'],
+                            template_path         = variables['template_path'],
+                            template_name          = variables['template_name'],
+                        )
     config.load()
 
-    templates_path = './templates'
-    template_name = 'test.txt'
-    output_path = './target'
-    output_name = 'test.txt'
-
-    template = JinjaRenderer(   templates_path = templates_path, 
-                                template_name = template_name, 
-                                output_path = output_path, 
-                                output_name = output_name,
-                                custom_functions = config.custom_functions,
-                                custom_variables = config.custom_variables
+    template = JinjaRenderer(   templates_path = config.data['template_path'],
+                                template_name = config.data['template_name'],
+                                output_path = config.data['output_path'],
+                                output_name = config.data['output_name'],
+                                custom_functions = config.data['custom_functions'],
+                                custom_variables = config.data['custom_variables']
                             )
     template.load_template()
     template.render_template()

@@ -33,5 +33,5 @@ def info(message, colour = 'white'):
         colour = bold
 
     message = f'{format_start}[INFO] {message}{clear}'
-    
-    return message    
+
+    return message
