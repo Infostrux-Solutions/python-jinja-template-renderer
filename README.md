@@ -1,12 +1,12 @@
-# Template Generator
-The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions and variables in use. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
+# Template Render
+The engine is a generator script for rendering Jinja templates that can use user-defined functions and variables. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
 
-The template generator is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
+The engine is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
 #
 ## Quick Demo
-> **Note** - All of the demo files can be found in the test/templates folder.
+> **Note** - All demo files can be found in the test/templates folder.
 
-Normally, when using Jinja templates, we would pass in some variables to be used in the template. In addition, if we wanted to use non-Jinja functions, you would need to add them to the scope of the template. This script intends to streamline this process by automatically importing the Python files with the functions and custom variables and making them available to the template.
+Normally, when using Jinja templates, we would pass in some variables to be used in the template. In addition, if we wanted to use non-Jinja functions, you would need to add them to the scope of the template. This script intends to streamline this process by automatically importing the  files with the functions and custom variables and making them available to the template.
 
 We first start with the configuration file [config.yml](../test/config.yml):
 
@@ -101,7 +101,7 @@ Some_Random_Person
 
 ## Initial setup
 
-1. Create a virtual environment (Requires Python 3.8 or higher)
+1. Create a virtual environment (Requires  3.8 or higher)
 2. Run ```pip install -r requirements.txt```
 3. Copy ```.env.sample``` to a new file called ```.env ```(you can comment out the variables you don't need)
 4. Set variables in ```.env``` as required
@@ -111,13 +111,13 @@ Some_Random_Person
 The command-line entry point script is  ```main.py```. You can find the input arguments by passing in the ```--help``` or `-h` argument, as such:
 
 ```
-python main.py --help
-python main.py -h
+ main.py --help
+ main.py -h
 ```
 
 You can define arguments either as command-line arguments, set as environment variables, or in a configuration file. See the following section **"Passing Arguments"** for more information on how to pass the arguments.
 
-> **NOTE**: You can always use normal Jinja functions in addition to the Python functions you have passed.
+> **NOTE**: You can always use normal Jinja functions in addition to the  functions you have passed.
 
 During execution, the script will read all arguments provided and do the following:
 
@@ -131,7 +131,7 @@ During execution, the script will read all arguments provided and do the followi
 
 A sample configuration, template and custom functions files can be found in the `test/template` folder for reference.
 
-> **NOTE**: Custom functions can use other built-in Python modules. However, custom module imports are not currently supported.
+> **NOTE**: Custom functions can use other built-in  modules. However, custom module imports are not currently supported.
 
 ## Passing Arguments
 
