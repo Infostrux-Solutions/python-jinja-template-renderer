@@ -1,5 +1,5 @@
 # Template Generator
-The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions in use. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
+The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions and variables in use. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
 
 The template generator is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
 #
