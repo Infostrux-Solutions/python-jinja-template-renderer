@@ -1,7 +1,7 @@
 # Python Jinja Template Renderer
-The engine is a generator script for rendering Jinja templates that can use user-defined functions and variables. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
+The renderer is a generator script for rendering Jinja templates that can use user-defined functions and variables. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
 
-The engine is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
+The renderer is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
 #
 ## Quick Demo
 > **Note** - All demo files can be found in the test/templates folder.
