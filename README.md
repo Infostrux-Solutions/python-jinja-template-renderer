@@ -1,12 +1,12 @@
 # Template Generator
-The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions in use. The code base can be used standalone as a command-line script, or as importable modules that can be imported into another program.
+The template generator is a generation script that is designed to import user-created functions and variables and generate templates in Jinja with those functions in use. The codebase can be used standalone as a command-line script or as importable modules that can be imported into another program.
 
-This is especially useful for generating code, such as creating dbt SQL mdoels from a list of requirements or creating other Jinja templates.
+The template generator is especially useful for generating code, such as creating dbt SQL models from metadata, but it can also be used to generate text, semistructured data such as JSON, and code in any other language.
 #
 ## Quick Demo
 > **Note** - All of the demo files can be found in the test/templates folder.
 
-Normally, when using Jinja templates, we would pass in some variables to be used in the template. In addition if we wanted to use non-Jinja functions, you would need to add them to the scope of the template. This script intends to streamline this process by automatically importing the Python files with the functions and custom variables and make them available to the template.
+Normally, when using Jinja templates, we would pass in some variables to be used in the template. In addition, if we wanted to use non-Jinja functions, you would need to add them to the scope of the template. This script intends to streamline this process by automatically importing the Python files with the functions and custom variables and making them available to the template.
 
 We first start with the configuration file [config.yml](../test/config.yml):
 
@@ -53,15 +53,15 @@ After careful review, we have scored it out of 120 points. Your final percentage
 
 Your total score: {{ main_functions__calc_score(score) }}%
 
-Sincerly,
+Sincerely,
 
 Some_Random_Person
 ```
-Note how for function calls, we follow the notaton of
+Note how for function calls, we follow the notation of
 ```
 [file_name]__[function_name]
 ```
-This is to allow for functions with the same name but in different files to co-exist with eath other. Once the configuration is set up, we call the script via [main.py](./main.py):  and pass in the configuration file as an argument. The script will automatically import all of the custom variables and functions to produce the following output:
+This allows functions with the same name in different files to co-exist with each other. Once the configuration is set up, we call the script via [main.py](./main.py):  and pass in the configuration file as an argument. The script will automatically import all of the custom variables and functions to produce the following output:
 
 ```
 Company Name: ACME Company
@@ -92,7 +92,7 @@ After careful review, we have scored it out of 120 points. Your final percentage
 
 Your total score: 0.75%
 
-Sincerly,
+Sincerely,
 
 Some_Random_Person
 ```
@@ -108,7 +108,7 @@ Some_Random_Person
 
 ## How to use
 
-The command-line entrypoint script is  ```main.py``` . You can find the input arguments by passing in the ```--help``` or `-h` argument, as such:
+The command-line entry point script is  ```main.py```. You can find the input arguments by passing in the ```--help``` or `-h` argument, as such:
 
 ```
 python main.py --help
@@ -117,7 +117,7 @@ python main.py -h
 
 You can define arguments either as command-line arguments, set as environment variables, or in a configuration file. See the following section **"Passing Arguments"** for more information on how to pass the arguments.
 
-> **NOTE**: You can always use normal Jinja functions in addition with the Python functions you have passed.
+> **NOTE**: You can always use normal Jinja functions in addition to the Python functions you have passed.
 
 During execution, the script will read all arguments provided and do the following:
 
@@ -131,7 +131,7 @@ During execution, the script will read all arguments provided and do the followi
 
 A sample configuration, template and custom functions files can be found in the `test/template` folder for reference.
 
-> **NOTE**: Custom functions can use other built-in python modules. However, custom module imports are not currently supported.
+> **NOTE**: Custom functions can use other built-in Python modules. However, custom module imports are not currently supported.
 
 ## Passing Arguments
 
@@ -142,29 +142,29 @@ There are **three ways** to pass arguments into the program. The following list 
 2. Arguments are loaded from the system `environment variables`, either through setting using the `.env` file or some other method
 3. Arguments are loaded from the `configuration file` that was specified. This is the only place that allows for the definition of custom variables, and accepts a list of files for the custom functions.
 
-The following charts describes each argument.
+The following charts describe each argument.
 
 ### Command-Line Arguments
-The command-line arguments are passed into the program using the command-line flags at runtime. These variables have the highest precendence and will override same-name varaibles found as environment variables or configuration file variables. You can only specify a single file for the custom functions file via this method. Custom variables cannot be set using this method.
+The command-line arguments are passed into the program using the command-line flags at runtime. These variables have the highest precedence and will override same-name variables found as environment variables or configuration file variables. You can only specify a single file for the custom functions file via this method. Custom variables cannot be set using this method.
 
 |  Argument  | Descripton  |
 |------------|-------------|
 | `-c <configuration_path>` <br /> `--config <configuration_path>`  | The path to the configuration file. Can be relative or absolute.  |
 | `-op <output_path>` <br /> `--output_path <output_path>`  | The path to the folder where you want the output to be dumped. |
 | `-o <output_name>` <br /> `--output_name <output_name>`  | The name of the output filename. |
-| `-cf <custom_functions_file>` <br /> `--custom_functions_file <custom_functions_file>`  | The path to the custom functions file. Can only specify one file on command-line. |
+| `-cf <custom_functions_file>` <br /> `--custom_functions_file <custom_functions_file>`  | The path to the custom functions file. You can only specify one file on the command line. |
 | `-tp <template_path>` <br /> `--template_path <template_path>`  | The path to the folder of where the template resides |
 | `-tn <template_name>` <br /> `--template_name <template_name>`  | The name of the template to be used for generation. |
 
 ### Environment Variables
-The environment variables are system session variables at can be set manually or via the `.env.sample` sample file. The variables here have higher precedence than the ones in the condiguration file, but can be overwritten by the command-line arguments. You can only specify a single file for the custom functions file.
+The environment variables are system session variables that can be set manually or via the `.env.sample` sample file. The variables here have higher precedence than the ones in the configuration file, but can be overwritten by the command-line arguments. You can only specify a single file for the custom functions file.
 
 |  Variable Name  | Descripton  |
 |------------|-------------|
-| `CONFIGURATION_FILE`  | The path to the configuration file. Can be relative or absolute.  |
+| `CONFIGURATION_FILE`  | The path to the configuration file. The path can be relative or absolute.  |
 | `OUTPUT_PATH`  | The path to the folder where you want the output to be dumped. |
 | `OUTPUT_LOCATION`  | The name of the output filename. |
-| `CUSTOM_FUNCTIONS_FILE`  | The path to the custom functions file. Can only specify one file. |
+| `CUSTOM_FUNCTIONS_FILE`  | The path to the custom functions file. The path can only specify one file. |
 | `TEMPLATE_PATH`  | The path to the folder of where the template resides |
 | `TEMPLATE_NAME`  | The name of the template to be used for generation. |
 
@@ -177,9 +177,9 @@ To see a sample configuration file, see `config.yml` in the `test\templates` fol
 
 |  Variable Name  | Descripton  |
 |------------|-------------|
-| `output_path`  | The path to the configuration file. Can be relative or absolute.  |
+| `output_path`  | The path to the configuration file. The path can be relative or absolute.  |
 | `output_name`  | The path to the folder where you want the output to be dumped. |
 | `custom_functions_file`  |  The path to the custom functions file. You can either pass in a single filepath or a list of filepaths. |
 | `custom_variables`  | A dictionary of custom variables that will be used within the template. Variables can be strings, numerics, lists and dictionaries.
-| `template_path`  | The path to the folder of where the template resides |
+| `template_path`  | The path to the folder where the template resides |
 | `template_name`  | The name of the template to be used for generation. |
